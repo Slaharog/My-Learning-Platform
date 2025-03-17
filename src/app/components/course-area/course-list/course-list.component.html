@@ -1,0 +1,14 @@
+<div *ngIf="courses.length > 0; else noCourses">
+    <div *ngFor="let course of courses" (click)="displayDetails(course.courseId)">
+        <h3>{{ course.title }}</h3>
+        <p>{{ course.description }}</p>
+        <p><strong>Created at:</strong> {{ course.createdAt | date }}</p>
+    </div>
+    <div>
+        <button (click)="navigateToAddCourse()">Add New Course</button>
+    </div>
+</div>
+
+<ng-template #noCourses>
+    <p>No courses available at the moment.</p>
+</ng-template>

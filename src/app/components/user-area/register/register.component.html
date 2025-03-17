@@ -1,0 +1,19 @@
+<div>
+    <form [formGroup]="userForm" (submit)="send()">
+
+        <label>Name: </label>
+        <input type="text" formControlName="nameControl">
+        <span *ngIf="userForm.controls['nameControl'].errors?.['required'] && userForm.controls['nameControl'].touched">Missing Name.</span>
+        <span *ngIf="userForm.controls['nameControl'].errors?.['minlength'] && userForm.controls['nameControl'].touched">Name too short.</span>
+        <span *ngIf="userForm.controls['nameControl'].errors?.['maxlength'] && userForm.controls['nameControl'].touched">Name too long.</span>
+
+        <label>Email: </label>
+        <input type="email" formControlName="emailControl">
+
+        <label>Password: </label>
+        <input type="password" formControlName="passwordControl">
+
+        <button [disabled]="userForm.invalid">Register</button>
+
+    </form>
+</div>

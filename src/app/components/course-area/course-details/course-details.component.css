@@ -1,0 +1,91 @@
+/* Container styling: Center everything */
+div {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 40px auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+div:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading style */
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Description style */
+p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Created At style */
+div > div > p {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Styling for button container */
+div > div {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Button styling */
+button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Update button style */
+button:first-of-type {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Delete button style */
+button:last-of-type {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Button hover effect */
+button:hover {
+    transform: translateY(-3px);
+}
+
+/* App-lesson-list component styling */
+app-lesson-list {
+    margin-top: 30px;
+}
+
+/* Add a subtle hover effect on the course container */
+div:hover {
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+}

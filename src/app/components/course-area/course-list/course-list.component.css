@@ -1,0 +1,107 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    width: 90%;
+    max-width: 1400px;
+    padding: 20px;
+}
+
+div > div {
+    flex: 1 1 calc(25% - 20px);
+    min-width: 250px;
+    max-width: 300px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 3px solid #ff5733;
+    cursor: pointer; /* Makes it clear it's clickable */
+    text-decoration: none; /* Prevents underline if wrapped in <a> */
+}
+
+div > div:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Active Click Effect */
+div > div:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Title Section */
+h3 {
+    font-size: 1.8em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 2px solid #fff;
+}
+
+/* Description Section */
+p {
+    font-size: 1.2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border: 2px solid #ff5733;
+}
+
+/* Created At Section */
+strong {
+    color: #000;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #fff;
+}
+
+ng-template p {
+    text-align: center;
+    font-style: italic;
+    color: #ff5733;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    div > div {
+        flex: 1 1 calc(33.333% - 20px);
+    }
+}
+
+@media (max-width: 900px) {
+    div > div {
+        flex: 1 1 calc(50% - 20px);
+    }
+}
+
+@media (max-width: 600px) {
+    div > div {
+        flex: 1 1 100%;
+    }
+}

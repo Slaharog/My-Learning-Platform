@@ -1,0 +1,36 @@
+:host {
+    display: block;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: blue;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    color: blue;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+  }
+  
+  p {
+    color: gray;
+    font-size: 1em;
+  }
+  
+  .lesson-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .lesson-card:hover {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  

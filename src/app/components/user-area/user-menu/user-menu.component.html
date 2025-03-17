@@ -1,0 +1,19 @@
+<div>
+    <div *ngIf="isLoggedIn">
+        <span>Welcome, {{ userName }}</span>
+        <button (click)="toggleDropdown()">▼</button>
+
+        <div *ngIf="dropdownOpen">
+            <ul>
+                <li><button (click)="logout()">Logout</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoggedIn">
+        <span>Welcome Guest</span>
+        <br>
+        <a routerLink="/login">Login | </a>
+        <a routerLink="/register">Register</a>
+    </div>
+</div>

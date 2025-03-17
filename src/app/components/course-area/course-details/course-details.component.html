@@ -1,0 +1,16 @@
+<div *ngIf="course">
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+
+    <div>
+        <p><strong>Created At:</strong> {{ course.createdAt | date }}</p>
+    </div>
+
+    <app-lesson-list [lessons]="lessons" [courseId]="course.courseId"></app-lesson-list>
+
+    <div>
+        <button (click)="updateCourse()">Update</button>
+        <button (click)="addLesson()">Add Lesson</button>
+        <button (click)="deleteCourse()">Delete</button>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<div>
+    <h2>Add New Course</h2>
+    
+    <form (ngSubmit)="addCourse()" [formGroup]="courseForm">
+      <div>
+        <label for="title">Title:</label>
+        <input 
+          type="text" 
+          id="title" 
+          formControlName="title" 
+          placeholder="Enter course title">
+        <div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
+          <span *ngIf="courseForm.get('title')?.errors?.['required']">Title is required</span>
+        </div>
+      </div>
+    
+      <div>
+        <label for="description">Description:</label>
+        <textarea 
+          id="description" 
+          formControlName="description" 
+          placeholder="Enter course description"
+          rows="4"></textarea>
+        <div *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
+          <span *ngIf="courseForm.get('description')?.errors?.['required']">Description is required</span>
+        </div>
+      </div>
+    
+      <div>
+        <button type="submit" [disabled]="courseForm.invalid">Add Course</button>
+        <button type="button" (click)="resetForm()">Reset</button>
+      </div>
+    </form>
+  </div>

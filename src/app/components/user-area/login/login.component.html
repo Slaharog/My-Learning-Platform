@@ -1,0 +1,13 @@
+<div>
+    <form [formGroup]="credentialForm" (submit)="send()">
+
+        <label>Email: </label>
+        <input type="email" formControlName="emailControl">
+
+        <label>Password: </label>
+        <input type="password" formControlName="passwordControl">
+
+        <button [disabled]="credentialForm.invalid">Login</button>
+
+    </form>
+</div>

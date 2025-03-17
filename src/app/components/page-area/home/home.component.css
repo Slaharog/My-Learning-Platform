@@ -1,0 +1,131 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f7fc;
+    color: #333;
+    text-align: center;
+}
+
+/* Hero Section */
+main > section:first-of-type {
+    background: linear-gradient(135deg, #004080, #0073e6);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+main > section:first-of-type h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+main > section:first-of-type p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+main > section:first-of-type button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #004080;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+main > section:first-of-type button:hover {
+    background-color: #ffdb4d;
+}
+
+/* Features Section */
+main > section:nth-of-type(2) {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 60px 20px;
+    flex-wrap: wrap;
+}
+
+main > section:nth-of-type(2) div {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+main > section:nth-of-type(2) div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+main > section:nth-of-type(2) img {
+    width: 80px;
+    margin-bottom: 15px;
+}
+
+/* Testimonials Section */
+main > section:nth-of-type(3) {
+    background: #e6eefc;
+    padding: 60px 20px;
+}
+
+main > section:nth-of-type(3) h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+main > section:nth-of-type(3) div {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Call to Action */
+main > section:last-of-type {
+    background: #004080;
+    color: white;
+    padding: 60px 20px;
+}
+
+main > section:last-of-type button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #004080;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+main > section:last-of-type button:hover {
+    background-color: #ffdb4d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    main > section:nth-of-type(2) {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    main > section:nth-of-type(2) div {
+        width: 90%;
+    }
+}
