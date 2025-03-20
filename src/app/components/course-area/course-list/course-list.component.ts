@@ -5,6 +5,10 @@ import { Router, RouterModule } from '@angular/router';
 import { CourseModel } from '../../../models/course.model';
 import { CourseService } from '../../../services/course.service';
 import { NotifyService } from '../../../services/notify.service';
+import { EnrollmentModel } from '../../../models/enrollment.model';
+import { UserStore } from '../../../../storage/user-store';
+import { EnrollmentService } from '../../../services/enrollment.service';
+import { CourseEnrollmentComponent } from "../course-enrollment/course-enrollment.component";
 
 @Component({
     selector: 'app-course-list',
@@ -14,11 +18,14 @@ import { NotifyService } from '../../../services/notify.service';
 })
 export class CourseListComponent implements OnInit {
     public courses: CourseModel[] = [];
+    public enrollment: EnrollmentModel;
+    isEnrolled: boolean = false;
 
     public constructor(
         private courseService: CourseService,
         private router: Router,
-        private notifyService: NotifyService
+        private notifyService: NotifyService,
+        private enrollmentService: EnrollmentService
     ) { } // DI
 
     public async ngOnInit() {
@@ -36,5 +43,10 @@ export class CourseListComponent implements OnInit {
 
     public navigateToAddCourse(): void {
         this.router.navigateByUrl('/courses/add');
+    }
+
+    viewCourseDetails(courseId: string): void {
+        // Navigate to specific course details
+        this.router.navigate(['/courses', courseId]);
     }
 }

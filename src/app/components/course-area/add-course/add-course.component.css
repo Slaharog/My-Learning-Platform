@@ -1,0 +1,193 @@
+:host {
+    display: block;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  /* Card styling with subtle shadow and border */
+  .card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: none;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Header with gradient background */
+  .card-header {
+    background: linear-gradient(135deg, #0062cc, #0096ff);
+    padding: 1.5rem;
+    border-bottom: none;
+  }
+  
+  .card-header h2 {
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  /* Form controls styling */
+  .form-label {
+    font-weight: 600;
+    color: #344767;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+  }
+  
+  .form-control {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: #f8f9fa;
+  }
+  
+  .form-control:focus {
+    border-color: #0062cc;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    background-color: #fff;
+  }
+  
+  .form-control::placeholder {
+    color: #adb5bd;
+  }
+  
+  textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  /* Custom styling for validation states */
+  .is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(1.5em + 0.75rem);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  }
+  
+  .invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Button group styling */
+  .d-flex.gap-2 {
+    margin-top: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+  }
+  
+  .btn-primary {
+    background-color: #0062cc;
+    border-color: #0062cc;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+  }
+  
+  .btn-primary:hover, .btn-primary:focus {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25);
+  }
+  
+  .btn-primary:disabled {
+    background-color: #b4d1fd;
+    border-color: #b4d1fd;
+    box-shadow: none;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+  }
+  
+  .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+  }
+  
+  /* Spinner animation */
+  .spinner-border {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .card-header {
+      padding: 1.25rem;
+    }
+    
+    .card-header h2 {
+      font-size: 1.5rem;
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+    }
+    
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.65rem 1.25rem;
+    }
+    
+    .d-flex.gap-2 {
+      flex-direction: column;
+      gap: 0.75rem !important;
+    }
+    
+    .btn {
+      width: 100%;
+    }
+  }
+  
+  /* Animation for form inputs when focusing */
+  .form-control:focus {
+    animation: pulse 1s;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 6px rgba(0, 123, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    }
+  }

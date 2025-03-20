@@ -1,16 +1,47 @@
-<div *ngIf="course">
-    <h1>{{ course.title }}</h1>
-    <p>{{ course.description }}</p>
+<div data-component="course-details">
+    <div data-section="header">
+        <h2 data-element="title" *ngIf="course">{{ course.title }}</h2>
+        <div data-section="actions">
+            <button data-element="header-button" (click)="updateCourse()">
+                Edit Course
+            </button>
 
-    <div>
-        <p><strong>Created At:</strong> {{ course.createdAt | date }}</p>
+            <button data-element="lesson-button" (click)="addLesson()">
+                Add Lesson
+            </button>
+        </div>
     </div>
 
-    <app-lesson-list [lessons]="lessons" [courseId]="course.courseId"></app-lesson-list>
+    <div data-section="body" *ngIf="course">
+        <p data-element="description">{{ course.description }}</p>
 
-    <div>
-        <button (click)="updateCourse()">Update</button>
-        <button (click)="addLesson()">Add Lesson</button>
-        <button (click)="deleteCourse()">Delete</button>
+        <!-- Enrollment Section -->
+        <div data-section="enrollment">
+            <app-course-enrollment [courseId]="courseId"></app-course-enrollment>
+        </div>
+
+        <!-- Course Progress Section -->
+        <div data-section="progress" *ngIf="isEnrolled">
+            <app-user-course-progress [courseId]="courseId"></app-user-course-progress>
+        </div>
+
+        <div data-section="lessons">
+            <h3>Course Lessons</h3>
+            <div *ngFor="let lesson of lessons" data-element="lesson">
+                <span data-element="lesson-title">{{ lesson.title }}</span>
+                <div data-section="lesson-actions">
+                    <button data-element="lesson-button" (click)="viewLesson(lesson.lessonId)">
+                        View Lesson
+                    </button>
+                    <button data-element="lesson-button" (click)="editLesson(lesson.lessonId)">
+                        Edit Lesson
+                    </button>
+                </div>
+            </div>
+            
+            <div *ngIf="lessons.length === 0" class="no-lessons">
+                No lessons available for this course yet.
+            </div>
+        </div>
     </div>
 </div>

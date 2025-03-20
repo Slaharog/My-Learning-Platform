@@ -1,15 +1,25 @@
-<header>
-    <div>
-        <div>My Learning Program</div>
-        <button (click)="toggleMenu()">☰</button>
-        <nav [class.active]="menuOpen">
-            <ul>
-                <li><a routerLink="/home">Home</a></li>
-                <li><a routerLink="/courses">Courses</a></li>
-                <li><a routerLink="/users">Profile</a></li>
-            </ul>
-            <app-user-menu />
-        </nav>
+<header class="app-header">
+    <div class="container">
+      <div class="header-logo">
+        <a routerLink="/home">
+          <span class="logo-text">Learning Platform</span>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" (click)="toggleMenu()">
+        <span class="menu-icon" [class.active]="menuOpen">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      
+      <nav class="main-nav" [class.active]="menuOpen">
+        <ul class="nav-links">
+          <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+          <li><a routerLink="/courses" routerLinkActive="active">Courses</a></li>
+          <li *ngIf="isLoggedIn"><a routerLink="/users" routerLinkActive="active">My Profile</a></li>
+        </ul>
+        
+        <app-user-menu></app-user-menu>
+      </nav>
     </div>
-</header>
-
+  </header>

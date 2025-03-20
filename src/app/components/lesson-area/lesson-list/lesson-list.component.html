@@ -1,32 +1,30 @@
-<div *ngIf="!showAddForm && !editingLessonId">
-    <h2>Lessons</h2>
-
-    <div *ngIf="lessons.length === 0">
-        <p>No lessons available for this course.</p>
-    </div>
-
-    <div *ngIf="lessons.length > 0">
-        <div *ngFor="let lesson of lessons">
-            <div>
-                <h3>{{ lesson.title }}</h3>
-                <p><strong>Video URL:</strong> <a routerLink="{{ lesson.videoUrl }}" target="_blank">{{ lesson.videoUrl }}</a>
-                </p>
-                <div>
-                    <button (click)="editLesson(lesson.lessonId)">Edit</button>
-                    <button (click)="deleteLesson(lesson.lessonId)">Delete</button>
-                </div>
+<div data-component="lesson-list">
+    <div data-section="lessons">
+        <div 
+            *ngFor="let lesson of lessons" 
+            data-element="lesson"
+        >
+            <span data-element="lesson-title">
+                {{ lesson.title }}
+            </span>
+            
+            <div data-section="lesson-actions">
+                <button 
+                    data-element="lesson-button"
+                    data-type="edit"
+                    (click)="editLesson(lesson.lessonId)"
+                >
+                    Edit
+                </button>
+                
+                <button 
+                    data-element="lesson-button"
+                    data-type="delete"
+                    (click)="deleteLesson(lesson.lessonId)"
+                >
+                    Delete
+                </button>
             </div>
         </div>
     </div>
-
 </div>
-
-<!-- Show lesson details component for adding -->
-<app-lesson-details *ngIf="showAddForm" [courseId]="courseId" (lessonSaved)="handleLessonSaved()"
-    (cancelled)="showAddForm = false">
-</app-lesson-details>
-
-<!-- Show lesson details component for editing -->
-<app-lesson-details *ngIf="editingLessonId" [courseId]="courseId" [lessonId]="editingLessonId"
-    (lessonSaved)="handleLessonSaved()" (cancelled)="editingLessonId = null">
-</app-lesson-details>

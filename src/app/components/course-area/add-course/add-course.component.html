@@ -1,34 +1,61 @@
-<div>
-    <h2>Add New Course</h2>
-    
-    <form (ngSubmit)="addCourse()" [formGroup]="courseForm">
-      <div>
-        <label for="title">Title:</label>
-        <input 
-          type="text" 
-          id="title" 
-          formControlName="title" 
-          placeholder="Enter course title">
-        <div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
-          <span *ngIf="courseForm.get('title')?.errors?.['required']">Title is required</span>
-        </div>
+<div class="container mt-4">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h2 class="mb-0">{{ isEditMode ? 'Update Course' : 'Add New Course' }}</h2>
       </div>
-    
-      <div>
-        <label for="description">Description:</label>
-        <textarea 
-          id="description" 
-          formControlName="description" 
-          placeholder="Enter course description"
-          rows="4"></textarea>
-        <div *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
-          <span *ngIf="courseForm.get('description')?.errors?.['required']">Description is required</span>
-        </div>
+      
+      <div class="card-body">
+        <form (ngSubmit)="saveCourse()" [formGroup]="courseForm">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input 
+              type="text" 
+              id="title" 
+              formControlName="title" 
+              class="form-control"
+              [ngClass]="{'is-invalid': hasError('title')}"
+              placeholder="Enter course title">
+            <div *ngIf="hasError('title')" class="invalid-feedback">
+              {{getErrorMessage('title')}}
+            </div>
+          </div>
+        
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea 
+              id="description" 
+              formControlName="description" 
+              class="form-control"
+              [ngClass]="{'is-invalid': hasError('description')}"
+              placeholder="Enter course description"
+              rows="4"></textarea>
+            <div *ngIf="hasError('description')" class="invalid-feedback">
+              {{getErrorMessage('description')}}
+            </div>
+          </div>
+        
+          <div class="d-flex gap-2">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="courseForm.invalid || isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1"></span>
+              {{ isEditMode ? 'Update Course' : 'Add Course' }}
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="resetForm()">
+              Reset
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary" 
+              (click)="cancel()">
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
-    
-      <div>
-        <button type="submit" [disabled]="courseForm.invalid">Add Course</button>
-        <button type="button" (click)="resetForm()">Reset</button>
-      </div>
-    </form>
+    </div>
   </div>

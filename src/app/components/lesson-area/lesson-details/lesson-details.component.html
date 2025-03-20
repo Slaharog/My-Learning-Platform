@@ -1,34 +1,181 @@
-<div>
-    <h2>{{ isEditMode ? 'Edit Lesson' : 'Add New Lesson' }}</h2>
-    
-    <form (ngSubmit)="saveLesson()" [formGroup]="lessonForm">
-      <div>
-        <label for="title">Title:</label>
-        <input 
-          type="text" 
-          id="title" 
-          formControlName="title" 
-          placeholder="Enter lesson title">
-        <div *ngIf="lessonForm.get('title')?.invalid && lessonForm.get('title')?.touched">
-          <span *ngIf="lessonForm.get('title')?.errors?.['required']">Title is required</span>
+<!-- Loading Indicator -->
+<div data-component="loading" *ngIf="isLoading">
+    <div data-element="loading-spinner"></div>
+    <p>Loading lesson...</p>
+</div>
+
+<!-- Error Message -->
+<div data-component="error" *ngIf="!isLoading && !lesson && viewMode !== 'add'">
+    <h2>Lesson not found</h2>
+    <p>Sorry, the requested lesson could not be found.</p>
+    <button (click)="goToCourse()">Back to Course</button>
+</div>
+
+<!-- VIEW MODE: Display lesson details and video -->
+<div data-component="lesson-details" *ngIf="!isLoading && lesson && viewMode === 'view'">
+    <!-- Added action buttons bar -->
+    <div class="action-buttons">
+        <button class="btn btn-secondary" (click)="goToCourse()">
+            <i class="bi bi-arrow-left"></i> Back to Course
+        </button>
+        <div class="btn-group">
+            <button class="btn btn-primary" (click)="navigateToEdit()">
+                <i class="bi bi-pencil"></i> Edit
+            </button>
+            <button class="btn btn-danger" (click)="deleteLesson()">
+                <i class="bi bi-trash"></i> Delete
+            </button>
         </div>
-      </div>
-    
-      <div>
-        <label for="videoUrl">Video URL:</label>
-        <input 
-          type="text" 
-          id="videoUrl" 
-          formControlName="videoUrl" 
-          placeholder="Enter video URL">
-        <div *ngIf="lessonForm.get('videoUrl')?.invalid && lessonForm.get('videoUrl')?.touched">
-          <span *ngIf="lessonForm.get('videoUrl')?.errors?.['required']">Video URL is required</span>
+    </div>
+
+    <div class="completion-card">
+        <div class="completion-status">
+            <app-status-badge [status]="isCompleted ? 'completed' : 'not-started'">
+                {{ isCompleted ? 'You have completed this lesson' : 'Not yet completed' }}
+            </app-status-badge>
         </div>
-      </div>
-    
-      <div>
-        <button type="submit" [disabled]="lessonForm.invalid">{{ isEditMode ? 'Update' : 'Add' }}</button>
-        <button type="button" (click)="cancelEdit()">Cancel</button>
-      </div>
+        <div data-section="header">
+            <h2 data-element="title">{{ lesson.title }}</h2>
+            <div data-section="status" *ngIf="isCompleted">
+                <span class="completed-badge">✓ Completed</span>
+            </div>
+        </div>
+
+        <div data-section="video-container">
+            <iframe data-element="video" [src]="safeVideoUrl" allowfullscreen></iframe>
+        </div>
+
+        <!-- Course progress with improved navigation buttons -->
+        <div class="course-progress" *ngIf="courseProgress">
+            <h4>Course Progress</h4>
+            <app-progress-bar [percentage]="courseProgress.percentComplete" [showCompleted]="true"
+                [completedCount]="courseProgress.completedLessons" [totalCount]="courseProgress.totalLessons"
+                itemLabel="lessons">
+            </app-progress-bar>
+
+            <div class="lesson-navigation">
+                <!-- Only show previous button if not the first lesson -->
+                <button class="nav-button prev-button" *ngIf="previousLessonId" (click)="navigateToLesson(previousLessonId)">
+                    <span class="nav-icon">←</span> Previous Lesson
+                </button>
+                
+                <!-- Fill space when previous button is missing -->
+                <div class="navigation-spacer" *ngIf="!previousLessonId"></div>
+                
+                <!-- Only show next button if not the last lesson -->
+                <button class="nav-button next-button" *ngIf="nextLessonId" (click)="navigateToLesson(nextLessonId)">
+                    Next Lesson <span class="nav-icon">→</span>
+                </button>
+                
+                <!-- Fill space when next button is missing -->
+                <div class="navigation-spacer" *ngIf="!nextLessonId"></div>
+            </div>
+        </div>
+
+        <!-- Always show navigation buttons even without courseProgress -->
+        <div class="lesson-navigation" *ngIf="!courseProgress">
+            <!-- Only show previous button if not the first lesson -->
+            <button class="nav-button prev-button" *ngIf="previousLessonId" (click)="navigateToLesson(previousLessonId)">
+                <span class="nav-icon">←</span> Previous Lesson
+            </button>
+            
+            <!-- Fill space when previous button is missing -->
+            <div class="navigation-spacer" *ngIf="!previousLessonId"></div>
+            
+            <!-- Only show next button if not the last lesson -->
+            <button class="nav-button next-button" *ngIf="nextLessonId" (click)="navigateToLesson(nextLessonId)">
+                Next Lesson <span class="nav-icon">→</span>
+            </button>
+            
+            <!-- Fill space when next button is missing -->
+            <div class="navigation-spacer" *ngIf="!nextLessonId"></div>
+        </div>
+
+        <button class="complete-button" [disabled]="isCompleted || isProcessing" (click)="markLessonCompleted()">
+            <span *ngIf="isProcessing" class="spinner"></span>
+            <span *ngIf="!isProcessing">
+                {{ isCompleted ? 'Completed' : 'Mark as Completed' }}
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- EDIT MODE: Form for editing an existing lesson -->
+<div data-component="lesson-edit" *ngIf="!isLoading && lesson && viewMode === 'edit'">
+    <div data-section="header">
+        <h2>Edit Lesson</h2>
+    </div>
+
+    <form [formGroup]="lessonForm" (ngSubmit)="saveLesson()">
+        <div data-element="form-group">
+            <label for="title">Lesson Title</label>
+            <input type="text" id="title" formControlName="title">
+            <div *ngIf="lessonForm.get('title').touched && lessonForm.get('title').invalid" class="error-message">
+                <p *ngIf="lessonForm.get('title').errors?.['required']">Title is required</p>
+                <p *ngIf="lessonForm.get('title').errors?.['minlength']">Title must be at least 2 characters</p>
+            </div>
+        </div>
+
+        <div data-element="form-group">
+            <label for="videoUrl">Video URL</label>
+            <input type="text" id="videoUrl" formControlName="videoUrl">
+            <div *ngIf="lessonForm.get('videoUrl').touched && lessonForm.get('videoUrl').invalid" class="error-message">
+                <p *ngIf="lessonForm.get('videoUrl').errors?.['required']">Video URL is required</p>
+            </div>
+
+            <!-- Preview current video if available -->
+            <div *ngIf="safeVideoUrl" class="video-preview">
+                <h4>Video Preview:</h4>
+                <iframe [src]="safeVideoUrl" width="320" height="180" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div data-element="form-actions">
+            <button type="button" (click)="cancelEdit()">Cancel</button>
+            <button type="submit" [disabled]="lessonForm.invalid">Save Changes</button>
+        </div>
     </form>
-  </div>
+</div>
+
+<!-- ADD MODE: Form for adding a new lesson -->
+<div data-component="lesson-add" *ngIf="viewMode === 'add'">
+    <div data-section="header">
+        <h2>Add New Lesson</h2>
+    </div>
+
+    <form [formGroup]="lessonForm" (ngSubmit)="saveLesson()">
+        <div data-element="form-group">
+            <label for="title">Lesson Title</label>
+            <input type="text" id="title" formControlName="title" placeholder="Enter lesson title">
+            <div *ngIf="lessonForm.get('title').touched && lessonForm.get('title').invalid" class="error-message">
+                <p *ngIf="lessonForm.get('title').errors?.['required']">Title is required</p>
+                <p *ngIf="lessonForm.get('title').errors?.['minlength']">Title must be at least 2 characters</p>
+            </div>
+        </div>
+
+        <div data-element="form-group">
+            <label for="videoUrl">Video URL</label>
+            <input type="text" id="videoUrl" formControlName="videoUrl" placeholder="Enter YouTube or Vimeo URL">
+            <div *ngIf="lessonForm.get('videoUrl').touched && lessonForm.get('videoUrl').invalid" class="error-message">
+                <p *ngIf="lessonForm.get('videoUrl').errors?.['required']">Video URL is required</p>
+            </div>
+
+            <!-- Preview button for entered URL -->
+            <button type="button" class="preview-button" [disabled]="!lessonForm.get('videoUrl').valid"
+                (click)="previewVideo()">
+                Preview Video
+            </button>
+
+            <!-- Video preview area -->
+            <div *ngIf="safeVideoUrl" class="video-preview">
+                <h4>Video Preview:</h4>
+                <iframe [src]="safeVideoUrl" width="320" height="180" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div data-element="form-actions">
+            <button type="button" (click)="cancelEdit()">Cancel</button>
+            <button type="submit" [disabled]="lessonForm.invalid">Add Lesson</button>
+        </div>
+    </form>
+</div>

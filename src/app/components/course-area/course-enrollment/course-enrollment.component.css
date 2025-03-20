@@ -1,0 +1,117 @@
+.enrollment-container {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-required {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: #e9ecef;
+  }
+  
+  .login-required a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .login-required a:hover {
+    text-decoration: underline;
+  }
+  
+  .enroll-section {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .enroll-button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  .enroll-button:hover {
+    background-color: #218838;
+  }
+  
+  .enroll-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .enrolled-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .enrolled-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #28a745;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background-color: rgba(40, 167, 69, 0.1);
+    border-radius: 6px;
+  }
+  
+  .enrolled-status i {
+    font-size: 1.2rem;
+  }
+  
+  .unenroll-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    color: #dc3545;
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .unenroll-button:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .unenroll-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .spinner-border {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    border-width: 0.2em;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .enrollment-container {
+      padding: 1rem;
+    }
+    
+    .enroll-button, .unenroll-button {
+      width: 100%;
+    }
+  }

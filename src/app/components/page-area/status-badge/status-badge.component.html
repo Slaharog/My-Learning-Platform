@@ -1,0 +1,11 @@
+<div class="status-badge" [ngClass]="statusClass">
+    <span class="status-icon" *ngIf="showIcon">
+      <ng-container [ngSwitch]="status">
+        <ng-container *ngSwitchCase="'completed'">✓</ng-container>
+        <ng-container *ngSwitchCase="'in-progress'">↻</ng-container>
+        <ng-container *ngSwitchCase="'not-started'">•</ng-container>
+        <ng-container *ngSwitchDefault>•</ng-container>
+      </ng-container>
+    </span>
+    <ng-content></ng-content>
+  </div>

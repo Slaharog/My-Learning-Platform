@@ -4,12 +4,7 @@ import { CourseModel } from '../../../models/course.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CourseService } from '../../../services/course.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LessonService } from '../../../services/lesson.service';
 import { NotifyService } from '../../../services/notify.service';
-import { LessonModel } from '../../../models/lesson.model';
-import { firstValueFrom } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-add-course',
@@ -18,70 +13,147 @@ import { HttpClient } from '@angular/common/http';
     styleUrl: './add-course.component.css'
 })
 export class AddCourseComponent implements OnInit {
-    public course: CourseModel | null = null;
-    public lessons: LessonModel[] = [];
     public courseForm: FormGroup;
-    public isAddMode = false;
+    public isSubmitting = false;
+    public isEditMode = false;
+    public courseId: string;
 
     constructor(
         private courseService: CourseService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private lessonService: LessonService,
-        private notyfService: NotifyService,
-        private formBuilder: FormBuilder,
-        private http: HttpClient
+        private notifyService: NotifyService,
+        private formBuilder: FormBuilder
     ) {
-        this.courseForm = this.formBuilder.group({
-            title: ['', [Validators.required]],
-            description: ['', [Validators.required]]
-        });
+        this.initForm();
     }
 
     public async ngOnInit(): Promise<void> {
-        try {
-            const id: string = this.activatedRoute.snapshot.params["courseId"];
-            if (!id || id === 'add') {
-                this.isAddMode = true;
-                this.course = new CourseModel(); // Initialize empty course
-                this.lessons = []; // No lessons for a new course
-                return; // Exit early - don't try to fetch
-            }
+        // Check route parameters to determine if we're in edit mode
+        this.activatedRoute.params.subscribe(async params => {
+            this.courseId = params['courseId'];
             
-            this.course = await this.courseService.getOneCourse(id);
-            this.lessons = await this.lessonService.getLessonsByCourse(id);
-        } catch (error: any) {
-            this.notyfService.error(error.message);
+            if (this.courseId && this.courseId !== 'add') {
+                this.isEditMode = true;
+                await this.loadCourseData(this.courseId);
+            } else {
+                this.isEditMode = false;
+            }
+        });
+    }
+
+    private initForm(): void {
+        this.courseForm = this.formBuilder.group({
+            title: ['', [
+                Validators.required, 
+                Validators.minLength(3), 
+                Validators.maxLength(100)
+            ]],
+            description: ['', [
+                Validators.required, 
+                Validators.minLength(10), 
+                Validators.maxLength(1000)
+            ]]
+        });
+    }
+
+    private async loadCourseData(courseId: string): Promise<void> {
+        try {
+            const course = await this.courseService.getOneCourse(courseId);
+            
+            // Update form with course data
+            this.courseForm.patchValue({
+                title: course.title,
+                description: course.description
+            });
+        } catch (error) {
+            console.error('Error loading course data:', error);
+            this.notifyService.error('Failed to load course data');
             this.router.navigate(['/courses']);
         }
     }
 
-    public async addCourse(): Promise<void> {
+    public async saveCourse(): Promise<void> {
         if (this.courseForm.invalid) {
+            // Mark all fields as touched to show validation errors
+            Object.keys(this.courseForm.controls).forEach(key => {
+                this.courseForm.get(key).markAsTouched();
+            });
             return;
         }
 
         try {
-            const newCourse = new CourseModel();
-            newCourse.title = this.courseForm.value.title;
-            newCourse.description = this.courseForm.value.description;
-            newCourse.createdAt = new Date();
+            this.isSubmitting = true;
+            
+            const courseData = {
+                title: this.courseForm.value.title,
+                description: this.courseForm.value.description,
+                createdAt: new Date()
+            } as CourseModel;
 
-            console.log('Adding new course:', newCourse);
-
-            // Make sure you're calling addCourse, not updateCourse
-            await this.courseService.addCourse(newCourse);
-
-            this.notyfService.success('Course added successfully');
+            if (this.isEditMode) {
+                // Update existing course
+                courseData.courseId = this.courseId;
+                await this.courseService.updateCourse(courseData, this.courseId);
+                this.notifyService.success('Course updated successfully');
+            } else {
+                // Add new course
+                await this.courseService.addCourse(courseData);
+                this.notifyService.success('Course added successfully');
+            }
+            
             this.router.navigate(['/courses']);
         } catch (error) {
-            console.error('Error adding course:', error);
-            this.notyfService.error('Failed to add course. Please try again later.');
+            console.error('Error saving course:', error);
+            this.notifyService.error(`Failed to ${this.isEditMode ? 'update' : 'add'} course`);
+        } finally {
+            this.isSubmitting = false;
         }
     }
 
     public resetForm(): void {
-        this.courseForm.reset();
+        if (this.isEditMode) {
+            // If editing, reload the original course data
+            this.loadCourseData(this.courseId);
+        } else {
+            // If adding new, just reset the form
+            this.courseForm.reset();
+        }
     }
 
+    public cancel(): void {
+        if (this.isEditMode) {
+            this.router.navigate(['/courses', this.courseId]);
+        } else {
+            this.router.navigate(['/courses']);
+        }
+    }
+    
+    // Helper methods for template
+    public hasError(controlName: string): boolean {
+        const control = this.courseForm.get(controlName);
+        return control ? (control.invalid && control.touched) : false;
+    }
+    
+    public getErrorMessage(controlName: string): string {
+        const control = this.courseForm.get(controlName);
+        
+        if (!control || !control.errors || !control.touched) {
+            return '';
+        }
+        
+        if (control.errors['required']) {
+            return 'This field is required';
+        }
+        
+        if (control.errors['minlength']) {
+            return `Minimum length is ${control.errors['minlength'].requiredLength} characters`;
+        }
+        
+        if (control.errors['maxlength']) {
+            return `Maximum length is ${control.errors['maxlength'].requiredLength} characters`;
+        }
+        
+        return 'Invalid input';
+    }
 }

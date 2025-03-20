@@ -1,14 +1,38 @@
-<div *ngIf="courses.length > 0; else noCourses">
-    <div *ngFor="let course of courses" (click)="displayDetails(course.courseId)">
-        <h3>{{ course.title }}</h3>
-        <p>{{ course.description }}</p>
-        <p><strong>Created at:</strong> {{ course.createdAt | date }}</p>
+<div data-component="course-list">
+    <div data-section="header">
+        <h1 data-element="title">My Courses</h1>
+        <button 
+            data-element="add-course-button"
+            (click)="navigateToAddCourse()"
+        >
+            Add New Course
+        </button>
     </div>
-    <div>
-        <button (click)="navigateToAddCourse()">Add New Course</button>
+
+    <div data-section="courses">
+        <div 
+            *ngFor="let course of courses"
+            data-element="course"
+        >
+            <div data-section="course-header">
+                <h3 data-element="course-title">{{ course.title }}</h3>
+            </div>
+            
+            <div data-section="course-body">
+                <p data-element="description">{{ course.description }}</p>
+            </div>
+            
+            <div data-section="course-footer">
+                <span data-element="date">
+                    Created: {{ course.createdAt | date }}
+                </span>
+                <button 
+                    data-element="button"
+                    (click)="viewCourseDetails(course.courseId)"
+                >
+                    View Details
+                </button>
+            </div>
+        </div>
     </div>
 </div>
-
-<ng-template #noCourses>
-    <p>No courses available at the moment.</p>
-</ng-template>

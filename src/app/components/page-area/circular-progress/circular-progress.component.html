@@ -1,0 +1,10 @@
+<div class="circular-progress">
+    <svg viewBox="0 0 36 36">
+        <circle class="background" cx="18" cy="18" r="15.5" />
+        <circle class="progress" cx="18" cy="18" r="15.5" [style.stroke-dasharray]="circumference"
+            [style.stroke-dashoffset]="dashOffset" />
+    </svg>
+    <div class="circular-progress-text">
+        {{ percentage }}%
+    </div>
+</div>

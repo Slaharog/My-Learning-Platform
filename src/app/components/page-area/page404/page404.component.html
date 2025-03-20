@@ -1,1 +1,67 @@
-<p>page404 works!</p>
+<div class="error-container">
+    <div class="error-content">
+      <div class="error-number">404</div>
+      <div class="error-title">Page Not Found</div>
+      <div class="error-subtitle">Oops! The page you're looking for doesn't exist.</div>
+      <div class="error-description">
+        The page might have been moved, deleted, or never existed in the first place.
+      </div>
+      
+      <div class="error-actions">
+        <button class="btn-primary" (click)="goBack()">
+          <i class="btn-icon">←</i> Go Back
+        </button>
+        <button class="btn-secondary" (click)="goHome()">
+          <i class="btn-icon">🏠</i> Go Home
+        </button>
+      </div>
+      
+      <div class="error-illustration">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" class="error-svg">
+          <!-- Background -->
+          <rect width="500" height="300" fill="#f8f9fa" rx="20" ry="20"/>
+          
+          <!-- Map/Terrain -->
+          <path d="M50,250 Q125,200 200,230 Q275,260 350,220 Q425,180 500,230 L500,300 L50,300 Z" fill="#e9ecef"/>
+          
+          <!-- Road -->
+          <path d="M0,250 L500,250" stroke="#ced4da" stroke-width="8" stroke-dasharray="12 8"/>
+          
+          <!-- Character -->
+          <g transform="translate(230, 180)">
+            <!-- Head -->
+            <circle cx="0" cy="0" r="20" fill="#4dabf7"/>
+            
+            <!-- Body -->
+            <path d="M0,20 L0,60" stroke="#4dabf7" stroke-width="8" stroke-linecap="round"/>
+            
+            <!-- Arms -->
+            <path d="M0,35 L-15,25" stroke="#4dabf7" stroke-width="6" stroke-linecap="round"/>
+            <path d="M0,35 L15,30" stroke="#4dabf7" stroke-width="6" stroke-linecap="round"/>
+            
+            <!-- Legs -->
+            <path d="M0,60 L-12,90" stroke="#4dabf7" stroke-width="6" stroke-linecap="round"/>
+            <path d="M0,60 L12,90" stroke="#4dabf7" stroke-width="6" stroke-linecap="round"/>
+            
+            <!-- Map -->
+            <rect x="15" y="25" width="20" height="18" fill="#fff" rx="2" ry="2" transform="rotate(15)"/>
+            <path d="M18,28 L32,28 M18,33 L28,33 M18,38 L30,38" stroke="#ced4da" stroke-width="1.5" transform="rotate(15)"/>
+          </g>
+          
+          <!-- Signpost -->
+          <g transform="translate(350, 160)">
+            <!-- Post -->
+            <rect x="-5" y="0" width="10" height="90" fill="#6c757d"/>
+            
+            <!-- Sign -->
+            <rect x="-55" y="-30" width="90" height="40" fill="#f03e3e" rx="5" ry="5"/>
+            <rect x="-50" y="-25" width="80" height="30" fill="#ff6b6b" rx="3" ry="3"/>
+            <text x="-35" y="-5" font-family="Arial" font-size="18" font-weight="bold" fill="#fff">404</text>
+            
+            <!-- Arrow -->
+            <path d="M35,0 L55,-10 L55,10 Z" fill="#f03e3e"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>

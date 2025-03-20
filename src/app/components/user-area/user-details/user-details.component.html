@@ -1,83 +1,177 @@
-<div *ngIf="user">
-    <h1>My Profile</h1>
-    
-    <div>
-      <h2>Account Information</h2>
-      <div>
-        <p><strong>Username:</strong> {{ user.name }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
+<div class="user-profile-container" *ngIf="user">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <span>{{ userInitials }}</span>
+      </div>
+      <div class="profile-info">
+        <h1 class="profile-name">{{ user.name }}</h1>
+        <p class="profile-email">{{ user.email }}</p>
       </div>
     </div>
-    
-    <div>
-      <h2>Profile Information</h2>
-      <div *ngIf="!isEditing">
-        <p><strong>Full Name:</strong> {{ user.name }}</p>
-        <button (click)="toggleEdit()">Edit Profile</button>
-      </div>
-      
-      <div *ngIf="isEditing">
-        <form (ngSubmit)="saveProfile()" [formGroup]="profileForm">
-          <div>
-            <label for="fullName">Full Name:</label>
-            <input 
-              type="text" 
-              id="fullName" 
-              formControlName="fullName" 
-              placeholder="Enter your full name">
-          </div>
-          
-          <div>
-            <label for="bio">Bio:</label>
-            <textarea 
-              id="bio" 
-              formControlName="bio" 
-              placeholder="Tell us about yourself"
-              rows="4"></textarea>
-          </div>
-          
-          <div>
-            <label for="location">Location:</label>
-            <input 
-              type="text" 
-              id="location" 
-              formControlName="location" 
-              placeholder="City, Country">
-          </div>
-          
-          <div>
-            <button type="submit">Save Profile</button>
-            <button type="button" (click)="cancelEdit()">Cancel</button>
-          </div>
-        </form>
-      </div>
+  
+    <!-- Profile Tabs -->
+    <div class="profile-tabs">
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'profile'"
+        (click)="setActiveTab('profile')"
+      >
+        <i class="tab-icon profile-icon"></i>
+        Profile
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'courses'"
+        (click)="setActiveTab('courses')"
+      >
+        <i class="tab-icon courses-icon"></i>
+        My Courses
+      </button>
+      <button 
+        class="tab-button" 
+        [class.active]="activeTab === 'progress'"
+        (click)="setActiveTab('progress')"
+      >
+        <i class="tab-icon progress-icon"></i>
+        Learning Progress
+      </button>
     </div>
-    
-    <div>
-      <h2>My Courses</h2>
-      <div *ngIf="enrolledCourses.length > 0">
-        <div *ngFor="let course of enrolledCourses">
-          <div>
-            <h3>{{ course.title }}</h3>
-            <p>{{ course.description }}</p>
-            <div>
-              <p><strong>Enrolled:</strong> {{ course.enrolledAt | date }}</p>
-              <p><strong>Progress:</strong> {{ course.completedLessons }} of {{ course.totalLessons }} lessons completed ({{ course.progress }}%)</p>
-              <div>
-                <progress [value]="course.progress" max="100"></progress>
+  
+    <!-- Tab Content -->
+    <div class="profile-content">
+      <!-- Profile Tab Content -->
+      <div *ngIf="activeTab === 'profile'" class="tab-content profile-tab">
+        <div class="profile-section">
+          <h2 class="section-title">Account Information</h2>
+          
+          <div class="profile-details">
+            <div class="detail-item">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">{{ user.name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">{{ user.email }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Account ID</span>
+              <span class="detail-value">{{ user.id }}</span>
+            </div>
+          </div>
+          
+          <button class="edit-profile-button">Edit Profile</button>
+        </div>
+      </div>
+  
+      <!-- Courses Tab Content -->
+      <div *ngIf="activeTab === 'courses'" class="tab-content courses-tab">
+        <div class="courses-section">
+          <h2 class="section-title">Enrolled Courses</h2>
+          
+          <div *ngIf="enrolledCourses.length === 0" class="empty-state">
+            <p>You are not enrolled in any courses yet.</p>
+            <a routerLink="/courses" class="primary-button">Browse Courses</a>
+          </div>
+          
+          <div *ngIf="enrolledCourses.length > 0" class="enrolled-courses">
+            <div *ngFor="let course of enrolledCourses" class="course-card">
+              <div class="course-header">
+                <h3 class="course-title">{{ course.title }}</h3>
+              </div>
+              <p class="course-description">{{ course.description }}</p>
+              <div class="course-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getCourseProgress(course.courseId)"></div>
+                </div>
+                <span class="progress-text">{{ getCourseProgress(course.courseId) }}% Complete</span>
+              </div>
+              <div class="course-actions">
+                <a [routerLink]="['/courses', course.courseId]" class="continue-button">Continue Learning</a>
               </div>
             </div>
-            <button [routerLink]="['/courses', course.courseId]">Continue Learning</button>
           </div>
         </div>
       </div>
-      <div *ngIf="enrolledCourses.length === 0">
-        <p>You are not enrolled in any courses yet.</p>
-        <button routerLink="/courses">Browse Courses</button>
+  
+      <!-- Progress Tab Content -->
+      <div *ngIf="activeTab === 'progress'" class="tab-content progress-tab">
+        <div class="progress-section">
+          <h2 class="section-title">Learning Progress</h2>
+          
+          <div *ngIf="enrolledCourses.length === 0" class="empty-state">
+            <p>No progress data available yet. Enroll in courses to track your progress.</p>
+            <a routerLink="/courses" class="primary-button">Browse Courses</a>
+          </div>
+          
+          <div *ngIf="enrolledCourses.length > 0" class="progress-overview">
+            <!-- Overall Stats -->
+            <div class="overall-stats">
+              <div class="stat-card">
+                <div class="stat-value">{{ enrolledCourses.length }}</div>
+                <div class="stat-label">Enrolled Courses</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">{{ completedLessonsCount }}</div>
+                <div class="stat-label">Lessons Completed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">{{ averageProgress }}%</div>
+                <div class="stat-label">Average Progress</div>
+              </div>
+            </div>
+            
+            <!-- Course Progress List -->
+            <div class="course-progress-list">
+              <div *ngFor="let course of enrolledCourses" class="course-progress-item">
+                <div class="course-info">
+                  <div class="course-header">
+                    <h3 class="course-title">{{ course.title }}</h3>
+                    <app-status-badge [status]="getCourseStatus(course.courseId)"></app-status-badge>
+                  </div>
+                  
+                  <app-progress-bar 
+                    [percentage]="getCourseProgress(course.courseId)"
+                    [showCompleted]="true"
+                    [completedCount]="getCompletedLessonsCount(course.courseId)"
+                    [totalCount]="getTotalLessonsCount(course.courseId)"
+                    itemLabel="lessons">
+                  </app-progress-bar>
+                  
+                  <div class="recent-activity" *ngIf="getRecentLessons(course.courseId).length > 0">
+                    <h4>Recent Activity</h4>
+                    <ul class="activity-list">
+                      <li *ngFor="let lesson of getRecentLessons(course.courseId)">
+                        <span class="activity-icon">✓</span>
+                        <span class="activity-text">Completed "{{ lesson.lessonTitle }}"</span>
+                        <span class="activity-date">{{ lesson.watchedAt | date:'mediumDate' }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="course-actions">
+                  <a [routerLink]="['/courses', course.courseId]" class="view-course-button">
+                    Continue Learning
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   
-  <div *ngIf="!user">
-    <p>Loading profile information...</p>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading profile data...</p>
+  </div>
+  
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !user" class="error-container">
+    <h2>Unable to load profile</h2>
+    <p>Please log in to view your profile information.</p>
+    <a routerLink="/login" class="primary-button">Log In</a>
   </div>

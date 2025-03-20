@@ -1,19 +1,40 @@
-<div>
-    <div *ngIf="isLoggedIn">
-        <span>Welcome, {{ userName }}</span>
-        <button (click)="toggleDropdown()">▼</button>
-
-        <div *ngIf="dropdownOpen">
-            <ul>
-                <li><button (click)="logout()">Logout</button></li>
-            </ul>
+<div class="user-menu-container">
+    <!-- Guest view - user not logged in -->
+    <div *ngIf="!isLoggedIn" class="guest-menu">
+      <a routerLink="/login" class="auth-button login-button">Login</a>
+      <a routerLink="/register" class="auth-button register-button">Register</a>
+    </div>
+  
+    <!-- Logged in user view -->
+    <div *ngIf="isLoggedIn" class="user-menu">
+      <div class="user-menu-trigger" (click)="toggleDropdown()">
+        <div class="user-avatar">
+          <span>{{ userInitials }}</span>
         </div>
+        <span class="user-name">{{ userName }}</span>
+        <i class="dropdown-icon" [class.open]="dropdownOpen"></i>
+      </div>
+  
+      <!-- Dropdown menu -->
+      <div class="user-dropdown" *ngIf="dropdownOpen">
+        <div class="dropdown-header">
+          <span>Signed in as</span>
+          <strong>{{ userName }}</strong>
+        </div>
+        
+        <div class="dropdown-divider"></div>
+        
+        <ul class="dropdown-menu">
+          <li><a routerLink="/users" (click)="closeDropdown()">My Profile</a></li>
+          <li><a routerLink="/users/enrollments" (click)="closeDropdown()">My Courses</a></li>
+          <li><a routerLink="/users/progress" (click)="closeDropdown()">My Progress</a></li>
+        </ul>
+        
+        <div class="dropdown-divider"></div>
+        
+        <div class="dropdown-footer">
+          <button (click)="logout()" class="logout-button">Log Out</button>
+        </div>
+      </div>
     </div>
-
-    <div *ngIf="!isLoggedIn">
-        <span>Welcome Guest</span>
-        <br>
-        <a routerLink="/login">Login | </a>
-        <a routerLink="/register">Register</a>
-    </div>
-</div>
+  </div>

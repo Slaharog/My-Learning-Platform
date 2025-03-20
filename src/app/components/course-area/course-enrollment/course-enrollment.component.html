@@ -1,0 +1,36 @@
+<div class="enrollment-container">
+    <div *ngIf="!authService.isAuthenticated()" class="login-required">
+      <p>Please <a [routerLink]="['/login']" [queryParams]="{returnUrl: currentUrl}">log in</a> to enroll in this course.</p>
+    </div>
+  
+    <div *ngIf="authService.isAuthenticated()">
+      <div *ngIf="!isEnrolled" class="enroll-section">
+        <button 
+          class="enroll-button" 
+          [disabled]="loading"
+          (click)="enrollInCourse()"
+        >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          <i *ngIf="!loading" class="bi bi-journal-check me-1"></i>
+          Enroll in Course
+        </button>
+      </div>
+      
+      <div *ngIf="isEnrolled" class="enrolled-section">
+        <div class="enrolled-status">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>You are enrolled in this course</span>
+        </div>
+        
+        <button
+          class="unenroll-button"
+          [disabled]="loading"
+          (click)="unenrollFromCourse()"
+        >
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          <i *ngIf="!loading" class="bi bi-journal-x me-1"></i>
+          Unenroll
+        </button>
+      </div>
+    </div>
+  </div>

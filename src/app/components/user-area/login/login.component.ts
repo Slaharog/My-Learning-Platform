@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NotifyService } from '../../../services/notify.service';
 import { CredentialsModel } from '../../../models/credentials.model';
 
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     constructor(
         private userService: UserService,
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
         private notifyService: NotifyService
 
@@ -33,13 +34,17 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    public async send() {
+    async send() {
         try {
             this.credential.email = this.credentialForm.get("emailControl").value;
             this.credential.password = this.credentialForm.get("passwordControl").value;
+            
             await this.userService.login(this.credential);
-            this.notifyService.success(`Welcome Back!`);
-            this.router.navigateByUrl("/home");
+            
+            // Check for return URL in query params
+            const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || 'home';
+            
+            this.router.navigateByUrl(returnUrl);
         }
         catch (err: any) {
             if (err.status === 0)
@@ -47,4 +52,5 @@ export class LoginComponent implements OnInit {
             this.notifyService.error(err.error);
         }
     }
+    
 }

@@ -1,15 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LessonModel } from '../../../models/lesson.model';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { LessonModel } from '../../../models/lesson.model';
 import { LessonService } from '../../../services/lesson.service';
-import { Router, RouterModule } from '@angular/router';
 import { NotifyService } from '../../../services/notify.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LessonDetailsComponent } from "../lesson-details/lesson-details.component";
 
 @Component({
     selector: 'app-lesson-list',
-    imports: [CommonModule, RouterModule, ReactiveFormsModule, LessonDetailsComponent],
+    imports: [CommonModule, RouterModule, ReactiveFormsModule],
     templateUrl: './lesson-list.component.html',
     styleUrl: './lesson-list.component.css'
 })
